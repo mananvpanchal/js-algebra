@@ -23,6 +23,10 @@ ArraySet.prototype.emptySet = function () {
 
 ArraySet.prototype.resetIndex = function () {
     this.index = 0;
+};
+
+ArraySet.prototype.getArray = function () {
+    return this.val;
 }
 
 module.exports = ArraySet;

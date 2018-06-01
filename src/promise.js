@@ -28,9 +28,7 @@ const promise = Monad.of(null, function (monad) {
     callback(resolve, reject);
 });
 
-console.log(promise);
 promise.then(function (res) {
 
 }).catch(function (err) {
-    console.log(err);
 });*/

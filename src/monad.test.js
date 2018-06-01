@@ -102,3 +102,11 @@ describe('Applicative rules', function() {
         });
     });
 });
+
+describe('Set of value, set of functions', function () {
+    it('should ap work', function () {
+        const f = Monad.of(new ArraySet([x => x + 5, x => x * 2]));
+        const v = Monad.of(new ArraySet([1, 2, 3]));
+        expect(v.ap(f).get().getArray()).to.be.deep.equal([6, 7, 8, 2, 4, 6]);
+    });
+});

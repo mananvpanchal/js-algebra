@@ -17,6 +17,7 @@ const mapSet = function (set, map) {
 const applySet = function (set, monad) {
     const newSet = set.emptySet();
     monad.forEach(function (apply) {
+        set.resetIndex();
         while (set.hasNextValue()) {
             newSet.setNextValue(apply(set.getNextValue()));
         }
@@ -72,11 +73,10 @@ Monad.prototype.map = function (mFunc) {
 };
 
 Monad.prototype.ap = function (monad) {
-    console.log(monad);
     if (!Monad.isMonad(monad))
-        throw new Error('parameter of ap should bbe type of monad');
-    if (!(typeof monad.value === 'function'))
-        throw new Error('value of monad should be type of function');
+        throw new Error('parameter of ap should be type of monad');
+    if (!isSet(monad.value) && !(typeof monad.value === 'function'))
+        throw new Error('value of monad should be type of set or function');
     return Monad.of(isSet(this.value)
         ? applySet(this.value, monad)
         : monad.value(this.value));
