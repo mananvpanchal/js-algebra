@@ -1,4 +1,4 @@
-const Monad = require('./monad');
+/*const Monad = require('./monad');
 
 const promise = Monad.of(null, function (monad) {
 
@@ -33,4 +33,4 @@ promise.then(function (res) {
 
 }).catch(function (err) {
     console.log(err);
-});
+});*/
