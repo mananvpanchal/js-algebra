@@ -3,17 +3,13 @@ const ArraySet = function (val) {
     this.index = 0;
 };
 
-ArraySet.prototype.hasNextValue = function () {
-    return this.index < this.val.length;
+ArraySet.prototype.forEach = function (func) {
+    for(let i = 0; i < this.val.length; i++) {
+        func(this.val[i], i);
+    }
 };
 
-ArraySet.prototype.getNextValue = function () {
-    const v = this.val[this.index];
-    this.index = this.index + 1;
-    return v;
-};
-
-ArraySet.prototype.setNextValue = function (v) {
+ArraySet.prototype.addValue = function (v) {
     this.val.push(v);
 };
 
@@ -21,12 +17,8 @@ ArraySet.prototype.emptySet = function () {
     return new ArraySet([]);
 };
 
-ArraySet.prototype.resetIndex = function () {
-    this.index = 0;
-};
-
 ArraySet.prototype.getArray = function () {
     return this.val;
-}
+};
 
 module.exports = ArraySet;

@@ -1,47 +1,56 @@
 const { isSet } = require('./util');
 
 const forEachSet = function (set, forEach) {
-    while (set.hasNextValue()) {
-        forEach(set.getNextValue());
-    }
+    set.forEach(function (val, idx) {
+        forEach(val)
+    });
 };
 
 const mapSet = function (set, map) {
     const newSet = set.emptySet();
-    while (set.hasNextValue()) {
-        newSet.setNextValue(map(set.getNextValue()));
-    }
+    set.forEach(function (val, idx) {
+        newSet.addValue(map(val));
+    });
     return newSet;
 };
 
 const applySet = function (set, monad) {
     const newSet = set.emptySet();
     monad.forEach(function (apply) {
-        set.resetIndex();
-        while (set.hasNextValue()) {
-            newSet.setNextValue(apply(set.getNextValue()));
-        }
+        set.forEach(function (val, idx) {
+            newSet.addValue(apply(val));
+        });
     });
     return newSet;
 };
 
 const chainSet = function (set, chain) {
     const newSet = set.emptySet();
-    while (set.hasNextValue()) {
-        const monad = chain(set.getNextValue());
+    set.forEach(function (val, idx) {
+        const monad = chain(val);
         if(!Monad.isMonad(monad)) {
             throw new Error('Return value of chain is not a Monad');
         }
-        newSet.setNextValue(monad.get());
-    }
+        newSet.addValue(monad.get());
+    });
     return Monad.of(newSet);
 };
 
-
+const joinSet = function (set) {
+    const newSet = set.emptySet();
+    set.forEach(function (val) {
+        if(Monad.isMonad(val)) {
+            newSet.addValue(val.get());
+        } else {
+            newSet.addValue(val);
+        }
+    });
+    return newSet;
+};
 
 const Monad = function (value, loader) {
     if (!value && !(typeof loader === 'function')) {
-        throw new Error('loader should be type of function when value is null / undefined')
+        throw new Error('Loader should be type of function when value is null / undefined')
     }
     this.value = value ? value : loader(this);
 };
@@ -65,7 +74,7 @@ Monad.isMonad = function (monad) {
 
 Monad.prototype.map = function (mFunc) {
     if (!(typeof mFunc === 'function')) {
-        throw new Error('parameter of map shoud be type of function')
+        throw new Error('Parameter of map shoud be type of function')
     }
     return Monad.of(isSet(this.value)
         ? mapSet(this.value, mFunc)
@@ -73,10 +82,12 @@ Monad.prototype.map = function (mFunc) {
 };
 
 Monad.prototype.ap = function (monad) {
-    if (!Monad.isMonad(monad))
-        throw new Error('parameter of ap should be type of monad');
-    if (!isSet(monad.value) && !(typeof monad.value === 'function'))
-        throw new Error('value of monad should be type of set or function');
+    if (!Monad.isMonad(monad)) {
+        throw new Error('Parameter of ap should be type of monad');
+    }
+    if (!isSet(monad.value) && !(typeof monad.value === 'function')) {
+        throw new Error('Value of monad should be type of set or function');
+    }
     return Monad.of(isSet(this.value)
         ? applySet(this.value, monad)
         : monad.value(this.value));
@@ -84,22 +95,26 @@ Monad.prototype.ap = function (monad) {
 
 Monad.prototype.chain = function (cFunc) {
     if (!(typeof cFunc === 'function')) {
-        throw new Error('parameter of chain shoud be type of function')
+        throw new Error('Parameter of chain shoud be type of function')
     }
     return isSet(this.value)
         ? chainSet(this.value, cFunc)
         : cFunc(this.value);
 };
 
+Monad.prototype.join = function () {
+    return isSet(this.value)
+        ? joinSet(this.value)
+        : this.value;
+};
+
 Monad.prototype.forEach = function (fFunc) {
     if (!(typeof fFunc === 'function')) {
-        throw new Error('parameter of forEach shoud be type of function')
+        throw new Error('Parameter of forEach shoud be type of function')
     }
-    if(isSet(this.value)) {
-        forEachSet(this.value, fFunc);
-    } else {
-        fFunc(this.value);
-    }
+    isSet(this.value)
+        ? forEachSet(this.value, fFunc)
+        : fFunc(this.value);
 };
 
 Monad.prototype.get = function () {

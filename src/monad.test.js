@@ -16,16 +16,15 @@ describe('Monad rules', function () {
             const f = function (x) {
                 if (isSet(x)) {
                     const x1 = x.emptySet();
-                    while (x.hasNextValue()) {
-                        x1.setNextValue(x.getNextValue() + 2);
-                    }
+                    x.forEach(function (val, idx) {
+                        x1.addValue(val + 2);
+                    });
                     return Monad.of(x1);
                 } else {
                     return Monad.of(x + 2);
                 }
             };
             const exp = Monad.of(set).chain(f).get();
-            set.resetIndex();
             const act = f(set).get();
             expect(exp).to.deep.equal(act);
         });
@@ -43,9 +42,9 @@ describe('Monad rules', function () {
             const f = function (x) {
                 if (isSet(x)) {
                     const x1 = x.emptySet();
-                    while (x.hasNextValue()) {
-                        x1.setNextValue(x.getNextValue() + 2);
-                    }
+                    x.forEach(function (val, idx) {
+                        x1.addValue(val + 2);
+                    });
                     return Monad.of(x1);
                 } else {
                     return Monad.of(x + 2);
@@ -54,7 +53,6 @@ describe('Monad rules', function () {
             const val = new ArraySet([1, 2, 3]);
             const m = Monad.of(val);
             const exp = m.chain(Monad.of);
-            val.resetIndex();
             expect(exp).to.deep.equal(m);
         });
     });
@@ -77,7 +75,6 @@ describe('Chain rules', function () {
             const val = new ArraySet([1, 2, 3]);
             const m = Monad.of(val);
             const exp = m.chain(f).chain(g);
-            val.resetIndex();
             const act = m.chain(x => f(x).chain(g));
             expect(exp).to.be.deep.equal(act);
         })
@@ -97,7 +94,6 @@ describe('Applicative rules', function() {
             const val = new ArraySet([1, 2, 3]);
             const v = Monad.of(val);
             const exp = v.ap(Monad.of(x => x));
-            val.resetIndex();
             expect(exp).to.be.deep.equal(v);
         });
     });
@@ -108,5 +104,14 @@ describe('Set of value, set of functions', function () {
         const f = Monad.of(new ArraySet([x => x + 5, x => x * 2]));
         const v = Monad.of(new ArraySet([1, 2, 3]));
         expect(v.ap(f).get().getArray()).to.be.deep.equal([6, 7, 8, 2, 4, 6]);
+    });
+});
+
+describe('Join', function () {
+    it('should join work', function () {
+        //const f = Monad.of(new ArraySet([x => x + 5, x => x * 2]));
+        const v = Monad.of(new ArraySet([Monad.of(1), Monad.of(2), Monad.of(3)]));
+        //console.log(v.join());
+        expect(v.join().getArray()).to.be.deep.equal([1, 2, 3]);
     });
 });
