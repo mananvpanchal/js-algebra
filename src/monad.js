@@ -28,7 +28,7 @@ const chainSet = function (set, chain) {
     const newSet = set.emptySet();
     set.forEach(function (val, idx) {
         const monad = chain(val);
-        if(!Monad.isMonad(monad)) {
+        if (!Monad.isMonad(monad)) {
             throw new Error('Return value of chain is not a Monad');
         }
         newSet.addValue(monad.get());
@@ -36,17 +36,35 @@ const chainSet = function (set, chain) {
     return Monad.of(newSet);
 };
 
-const joinSet = function (set) {
-    const newSet = set.emptySet();
+/*const _joinSet = function (set, newSet) {
     set.forEach(function (val) {
-        if(Monad.isMonad(val)) {
-            newSet.addValue(val.get());
+        if (Monad.isMonad(val)) {
+            if(isSet(val.get())) {
+                _joinSet(val.get(), newSet)
+            } else {
+                newSet.addValue(val.get());
+            }
         } else {
             newSet.addValue(val);
         }
     });
-    return newSet;
 };
+
+const joinSet = function (set) {
+    const newSet = set.emptySet();
+    set.forEach(function (val) {
+        if (Monad.isMonad(val)) {
+            if(isSet(val.get())) {
+                _joinSet(val.get(), newSet)
+            } else {
+                newSet.addValue(val.get());
+            }
+        } else {
+            newSet.addValue(val);
+        }
+    });
+    return Monad.of(newSet);
+};*/
 
 const Monad = function (value, loader) {
     if (!value && !(typeof loader === 'function')) {
@@ -102,11 +120,53 @@ Monad.prototype.chain = function (cFunc) {
         : cFunc(this.value);
 };
 
-Monad.prototype.join = function () {
-    return isSet(this.value)
-        ? joinSet(this.value)
-        : this.value;
+const joinMonad = function (val, set) {
+    if(Monad.isMonad(val)) {
+        if(Monad.isMonad(val.get()) || isSet(val.get())) {
+            return joinMonad(val.get(), set);
+        } else {
+            set.addValue(val.get());
+        }
+        //return joinMonad(val.get(), set);
+    } else if(isSet(val)) {
+        val.forEach(function (ele) {
+            if(Monad.isMonad(ele) || isSet(ele)) {
+                return joinMonad(ele, set);
+            } else {
+                set.addValue(ele);
+            }
+        });
+    } else {
+        return val;
+    }
 };
+
+Monad.prototype.join = function () {
+    if(Monad.isMonad(this.value)) {
+        return Monad.of(joinMonad(this.value.get()));
+    } else if(isSet(this.value)) {
+        const newSet = this.value.emptySet();
+        this.value.forEach(function (ele) {
+            if(Monad.isMonad(ele) || isSet(ele)) {
+                joinMonad(ele, newSet);
+            } else {
+                newSet.addValue(ele);
+            }
+        });
+        return Monad.of(newSet);
+    } else {
+        return Monad.of(this.value);
+    }
+};
+
+/*Monad.prototype.join = function () {
+    //console.log(Monad.isMonad(this.value), this.value, this.value.get());
+    return isSet(this.value)
+        ? Monad.of(joinSet(this.value))
+        : (Monad.isMonad(this.value) 
+            ? this.value
+            : Monad.of(this.value))
+};*/
 
 Monad.prototype.forEach = function (fFunc) {
     if (!(typeof fFunc === 'function')) {

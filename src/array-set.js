@@ -1,6 +1,5 @@
 const ArraySet = function (val) {
     this.val = val;
-    this.index = 0;
 };
 
 ArraySet.prototype.forEach = function (func) {
