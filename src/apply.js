@@ -17,7 +17,7 @@ Apply.isApply = function (apply) {
 Apply.prototype.ap = function (apply) {
     if (!Apply.isApply(apply)) {
         //todo: need to think about "type of" string
-        throw new Error('Parameter of ap should be type of apply');
+        throw new Error('Parameter of ap should be type of '+this.typeStr());
     }
     if (!isSet(apply.value) && !(typeof apply.value === 'function')) {
         throw new Error('Value of apply should be type of set or function');
@@ -25,6 +25,10 @@ Apply.prototype.ap = function (apply) {
     return new this.constructor(isSet(this.value)
         ? applySet(this.value, apply)
         : apply.value(this.value));
+};
+
+Apply.prototype.typeStr = function () {
+    return 'Apply';
 };
 
 inherit(Apply, Functor);

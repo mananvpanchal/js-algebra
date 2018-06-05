@@ -155,12 +155,12 @@ describe('Monad', function () {
     describe('Right Identity: m.chain(M.of) == m', function () {
         it('should work for primitive', function () {
             const m = Monad.of(5);
-            expect(m.chain(Monad.of)).to.be.deep.equal(m);
+            expect(m.chain(Monad.of.bind(Monad))).to.be.deep.equal(m);
         });
 
         it('should work for set', function () {
             const m = Monad.of(new ArraySet([1, 2, 3]));
-            expect(m.chain(Monad.of)).to.be.deep.equal(m);
+            expect(m.chain(Monad.of.bind(Monad))).to.be.deep.equal(m);
         });
     });
 });

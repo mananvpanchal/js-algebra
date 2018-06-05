@@ -44,4 +44,8 @@ Functor.prototype.get = function () {
     return this.value;
 };
 
+Functor.prototype.typeStr = function () {
+    return 'Functor';
+};
+
 module.exports = Functor;
