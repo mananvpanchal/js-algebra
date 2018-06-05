@@ -127,7 +127,7 @@ describe('Chain', function () {
             Monad.of(new ArraySet([
                 Monad.of(new ArraySet([Monad.of(1), Monad.of(2), Monad.of(3)])),
                 Monad.of(new ArraySet([4, Monad.of(Monad.of(Monad.of(5))), 6])),
-                Monad.of(new ArraySet([Monad.of(7), Monad.of(8), Monad.of(9)]))
+                new ArraySet([Monad.of(7), 8, Monad.of(Monad.of(9))])
             ])),
             Monad.of(new ArraySet([10, 11, 12])),
             Monad.of(13),
@@ -136,8 +136,9 @@ describe('Chain', function () {
 
         expect(v1.join().get().getArray()).to.be.deep.equal([1, 2, 3]);
         expect(v2.join().get().getArray()).to.be.deep.equal([1, 2, 3]);
-        expect(v3.join().get().getArray()).to.be.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            11, 12, 13, 14]);
+        expect(v3.join().get().getArray()).to.be.deep.equal([
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+        ]);
     });
 });
 

@@ -4,11 +4,12 @@ const Monad = function (value, loader) {
     if (!value && !(typeof loader === 'function')) {
         throw new Error('Loader should be type of function when value is null / undefined')
     }
-    this.value = value ? value : loader(this);
+    this.value = value;
+    this.loader = loader;
 };
 
-Monad.of = function (value) {
-    return new Monad(value);
+Monad.of = function (value, loader) {
+    return new Monad(value, loader);
 };
 
 Monad.ofLoader = function (loader) {
@@ -22,6 +23,13 @@ Monad.isMonad = function (monad) {
         && ('map' in monad)
         && ('ap' in monad)
         && ('chain' in monad);
+};
+
+Monad.prototype.load = function() {
+    if (!(typeof this.loader === 'function')) {
+        throw new Error('Loader should be type of function')
+    }
+    this.value = this.loader(this);
 };
 
 const mapSet = function (set, map) {
@@ -99,28 +107,28 @@ Monad.prototype.forEach = function (fFunc) {
         : fFunc(this.value);
 };
 
-const joinSet = function (set) {
+const flattenMonad = function (val) {
+    if (Monad.isMonad(val)) {
+        return flattenMonad(val.get());
+    } else if (isSet(val)) {
+        return createSetTree(val);
+    } else {
+        return val;
+    }
+};
+
+const createSetTree = function (set) {
     const newSet = set.emptySet();
     set.forEach(function (val) {
         if (Monad.isMonad(val)) {
-            newSet.addValue(joinMonad(val.get()));
+            newSet.addValue(flattenMonad(val.get()));
         } else if (isSet(val)) {
-            newSet.addValue(joinSet(val));
+            newSet.addValue(createSetTree(val));
         } else {
             newSet.addValue(val);
         }
     });
     return newSet;
-};
-
-const joinMonad = function (val) {
-    if (Monad.isMonad(val)) {
-        return joinMonad(val.get());
-    } else if (isSet(val)) {
-        return joinSet(val);
-    } else {
-        return val;
-    }
 };
 
 const flattenSet = function (set, newSet) {
@@ -134,7 +142,7 @@ const flattenSet = function (set, newSet) {
 };
 
 Monad.prototype.join = function () {
-    const val = joinMonad(this.value);
+    const val = flattenMonad(this.value);
     if (isSet(val)) {
         const newSet = val.emptySet();
         flattenSet(val, newSet);
