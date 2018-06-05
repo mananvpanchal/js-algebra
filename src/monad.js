@@ -123,10 +123,10 @@ const joinMonad = function (val) {
     }
 };
 
-const _joinSet = function (set, newSet) {
+const flattenSet = function (set, newSet) {
     set.forEach(function (val) {
         if (isSet(val)) {
-            _joinSet(val, newSet);
+            flattenSet(val, newSet);
         } else {
             newSet.addValue(val);
         }
@@ -137,7 +137,7 @@ Monad.prototype.join = function () {
     const val = joinMonad(this.value);
     if (isSet(val)) {
         const newSet = val.emptySet();
-        _joinSet(val, newSet);
+        flattenSet(val, newSet);
         return Monad.of(newSet);
     } else {
         return Monad.of(val);
