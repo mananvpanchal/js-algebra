@@ -18,10 +18,6 @@ Applicative.ofLoader = function (loader) {
     return new this(null, loader);
 };
 
-Applicative.isApplicative = function (monad) {
-    return isApplicative(monad);
-};
-
 Applicative.prototype.typeStr = function () {
     return 'Applicative';
 };
