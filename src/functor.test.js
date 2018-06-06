@@ -3,6 +3,20 @@ const { expect } = require('chai');
 const ArraySet = require('./array-set');
 
 describe('Functor', function () {
+
+    describe('Is of Type test', function () {
+
+        it('isFunctor', function () {
+            const f = new Functor(1);
+            expect(Functor.isFunctor(f)).to.be.true;
+        });
+
+        it('typeStr', function () {
+            const f = new Functor(1);
+            expect(f.typeStr()).to.be.equal('Functor');
+        });
+    });
+
     describe('Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = new Functor(5);

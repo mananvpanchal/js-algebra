@@ -1,22 +1,17 @@
 const Functor = require('./functor');
 const inherit = require('./inheritance');
-const { isSet, applySet } = require('./util');
+const { isSet, isApply, applySet } = require('./util');
 
 const Apply = function (value, loader) {
     Functor.call(this, value, loader);
 };
 
 Apply.isApply = function (apply) {
-    return apply
-        && typeof apply === 'object'
-        && ('value' in apply)
-        && ('map' in apply)
-        && ('ap' in apply);
+    return isApply(apply);
 };
 
 Apply.prototype.ap = function (apply) {
     if (!Apply.isApply(apply)) {
-        //todo: need to think about "type of" string
         throw new Error('Parameter of ap should be type of '+this.typeStr());
     }
     if (!isSet(apply.value) && !(typeof apply.value === 'function')) {

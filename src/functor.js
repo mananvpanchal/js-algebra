@@ -1,4 +1,4 @@
-const { isSet, mapSet, forEachSet } = require('./util');
+const { isSet, isFunctor, mapSet, forEachSet } = require('./util');
 
 const Functor = function (value, loader) {
     if (!value && !(typeof loader === 'function')) {
@@ -9,10 +9,7 @@ const Functor = function (value, loader) {
 };
 
 Functor.isFunctor = function (functor) {
-    return functor
-        && typeof functor === 'object'
-        && ('value' in functor)
-        && ('map' in functor);
+    return isFunctor(functor);
 };
 
 Functor.prototype.load = function() {

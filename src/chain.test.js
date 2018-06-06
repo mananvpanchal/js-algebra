@@ -3,6 +3,82 @@ const Chain = require('./chain');
 const ArraySet = require('./array-set');
 
 describe('Chain', function () {
+
+    describe('Is of Type test', function () {
+    
+        it('isChain', function () {
+            const c = new Chain(1);
+            expect(Chain.isChain(c)).to.be.true;
+        });
+
+        it('isApply', function () {
+            const c = new Chain(1);
+            expect(Chain.isApply(c)).to.be.true;
+        });
+
+        it('isFunctor', function () {
+            const c = new Chain(1);
+            expect(Chain.isFunctor(c)).to.be.true;
+        });
+
+        it('typeStr', function () {
+            const c = new Chain(1);
+            expect(c.typeStr()).to.be.equal('Chain');
+        });
+    });
+
+    describe('Identity: u.map(a => a) == u', function () {
+        it('should be work for primitive', function () {
+            const u = new Chain(5);
+            expect(u.map(a => a)).to.be.deep.equal(u);
+        });
+
+        it('should be work for set', function () {
+            const u = new Chain(new ArraySet([1, 2, 3]));
+            expect(u.map(a => a)).to.be.deep.equal(u);
+        });
+    });
+
+    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+        it('should be work for primitive', function () {
+            const u = new Chain(5);
+            const f = function (x) { return x + 5; };
+            const g = function (x) { return x * 2; };
+            expect(u.map(x => f(g(x)))).to.be.deep.equal(u.map(g).map(f));
+        });
+
+        it('should be work for set', function () {
+            const u = new Chain(new ArraySet([1, 2, 3]));
+            const f = function (x) { return x + 5; };
+            const g = function (x) { return x * 2; };
+            expect(u.map(x => f(g(x)))).to.be.deep.equal(u.map(g).map(f));
+        });
+    });
+
+    describe('Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
+        it('should be work for primitive', function () {
+            const v = new Chain(5);
+            const u = new Chain(function (x) { return x + 5; });
+            const a = new Chain(function (x) { return x * 2; });
+
+            expect(v.ap(u.ap(a.map(f => g => x => f(g(x)))))).to.be.deep.equal(v.ap(u).ap(a));
+        });
+
+        it('should be work for set', function () {
+            const v = new Chain(new ArraySet([1, 2, 3]));
+            const u = new Chain(function (x) { return x + 5; });
+            const a = new Chain(function (x) { return x * 2; });
+
+            expect(v.ap(u.ap(a.map(f => g => x => f(g(x)))))).to.be.deep.equal(v.ap(u).ap(a));
+        });
+    });
+
+    it('should work with set of functions', function () {
+        const f = new Chain(new ArraySet([x => x + 5, x => x * 2]));
+        const v = new Chain(new ArraySet([1, 2, 3]));
+        expect(v.ap(f).get().getArray()).to.be.deep.equal([6, 7, 8, 2, 4, 6]);
+    });
+
     describe('Associativity: m.chain(f).chain(g) == m.chain(x => f(x).chain(g))', function () {
         it('should work for primitive', function () {
             const m = new Chain(5);
@@ -17,36 +93,5 @@ describe('Chain', function () {
             const g = function (x) { return new Chain(x * 2); };
             expect(m.chain(f).chain(g)).to.be.deep.equal(m.chain(x => f(x).chain(g)));
         });
-    });
-
-    it('should work for nested primitive', function () {
-        const v1 = new Chain(1);
-        const v2 = new Chain(new Chain(1));
-        const v3 = new Chain(new Chain(new Chain(new Chain(1))));
-
-        expect(v1.join().get()).to.be.equal(1);
-        expect(v2.join().get()).to.be.equal(1);
-        expect(v3.join().get()).to.be.equal(1);
-    });
-
-    it('should work for nested set', function () {
-        const v1 = new Chain(new ArraySet([new Chain(1), new Chain(2), new Chain(3)]));
-        const v2 = new Chain(new ArraySet([1, 2, 3]));
-        const v3 = new Chain(new Chain(new ArraySet([
-            new Chain(new ArraySet([
-                new Chain(new ArraySet([new Chain(1), new Chain(2), new Chain(3)])),
-                new Chain(new ArraySet([4, new Chain(new Chain(new Chain(5))), 6])),
-                new ArraySet([new Chain(7), 8, new Chain(new Chain(9))])
-            ])),
-            new Chain(new ArraySet([10, 11, 12])),
-            new Chain(13),
-            14])
-        ));
-
-        expect(v1.join().get().getArray()).to.be.deep.equal([1, 2, 3]);
-        expect(v2.join().get().getArray()).to.be.deep.equal([1, 2, 3]);
-        expect(v3.join().get().getArray()).to.be.deep.equal([
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-        ]);
     });
 });
