@@ -188,4 +188,18 @@ describe('Monad', function () {
             ]);
         });
     });
+
+    describe('Error checking', function () {
+        it('shoud check for monad type', function () {
+            const m = Monad.of(new ArraySet([1, 2, 3]));
+            const f = function (x) { return x + 5; };
+            expect(m.chain.bind(m, f)).to.throw('Return value of chain function is not a type of Monad');
+        });
+
+        it('shoud check for apply type', function () {
+            const a = Monad.of(1);
+            const f = function (x) { return x + 5; };
+            expect(a.ap.bind(a, f)).to.throw('Parameter of ap should be type of Monad');
+        });
+    });
 });

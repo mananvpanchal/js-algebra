@@ -11,12 +11,23 @@ Chain.isChain = function (chain) {
 };
 
 Chain.prototype.chain = function (cFunc) {
+    const typeStr = this.typeStr.bind(this);
     if (!(typeof cFunc === 'function')) {
         throw new Error('Parameter of chain shoud be type of function')
     }
-    return isSet(this.value)
-        ? new this.constructor(chainSet(this.value, cFunc))
-        : cFunc(this.value);
+    if (isSet(this.value)) {
+        const newSet = this.value.emptySet();
+        const chnSet = chainSet(this.value, cFunc);
+        chnSet.forEach(function (chn, idx) {
+            if(!isChain(chn)) {
+                throw new Error('Return value of chain function is not a type of '+typeStr());
+            }
+            newSet.addValue(chn.get());
+        });
+        return new this.constructor(newSet);
+    } else {
+        return cFunc(this.value);
+    }
 };
 
 Chain.prototype.typeStr = function () {

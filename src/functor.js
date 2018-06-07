@@ -28,15 +28,6 @@ Functor.prototype.map = function (mFunc) {
         : mFunc(this.value));
 };
 
-Functor.prototype.forEach = function (fFunc) {
-    if (!(typeof fFunc === 'function')) {
-        throw new Error('Parameter of forEach shoud be type of function')
-    }
-    isSet(this.value)
-        ? forEachSet(this.value, fFunc)
-        : fFunc(this.value);
-};
-
 Functor.prototype.get = function () {
     return this.value;
 };

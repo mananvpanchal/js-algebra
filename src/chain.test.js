@@ -5,7 +5,7 @@ const ArraySet = require('./array-set');
 describe('Chain', function () {
 
     describe('Is of Type test', function () {
-    
+
         it('isChain', function () {
             const c = new Chain(1);
             expect(Chain.isChain(c)).to.be.true;
@@ -92,6 +92,20 @@ describe('Chain', function () {
             const f = function (x) { return new Chain(x + 5); };
             const g = function (x) { return new Chain(x * 2); };
             expect(m.chain(f).chain(g)).to.be.deep.equal(m.chain(x => f(x).chain(g)));
+        });
+    });
+
+    describe('Error checking', function () {
+        it('shoud check for chain type', function () {
+            const c = new Chain(new ArraySet([1, 2, 3]));
+            const f = function (x) { return x + 5; };
+            expect(c.chain.bind(c, f)).to.throw('Return value of chain function is not a type of Chain');
+        });
+
+        it('shoud check for apply type', function () {
+            const a = new Chain(1);
+            const f = function (x) { return x + 5; };
+            expect(a.ap.bind(a, f)).to.throw('Parameter of ap should be type of Chain');
         });
     });
 });

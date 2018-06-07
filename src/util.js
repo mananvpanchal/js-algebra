@@ -19,7 +19,7 @@ const isApply = function (val) {
 };
 
 const isApplicative = function (val) {
-    return isApply(val) 
+    return isApply(val)
         && typeof val.constructor.of === 'function';
 };
 
@@ -41,36 +41,32 @@ const mapSet = function (set, map) {
     return newSet;
 };
 
-const forEachSet = function (set, forEach) {
+const _applySet = function (set, newSet, apFunc) {
     set.forEach(function (val, idx) {
-        forEach(val)
+        newSet.addValue(apFunc(val));
     });
 };
 
-const applySet = function (set, monad) {
+const applySet = function (set, apply) {
     const newSet = set.emptySet();
-    monad.forEach(function (apply) {
-        set.forEach(function (val, idx) {
-            newSet.addValue(apply(val));
-        });
-    });
+    isSet(apply.get())
+        ? apply.get().forEach(function (apFunc) {
+            _applySet(set, newSet, apFunc);
+        })
+        : _applySet(set, newSet, apply.get());
     return newSet;
 };
 
 const chainSet = function (set, chain) {
     const newSet = set.emptySet();
     set.forEach(function (val, idx) {
-        const chn = chain(val);
-        if (!isChain(chn)) {
-            throw new Error('Return value of chain is not a type of Chain');
-        }
-        newSet.addValue(chn.get());
+        newSet.addValue(chain(val));
     });
     return newSet;
 };
 
 const flattenMonad = function (val) {
-    if (isChain(val)) {
+    if (isMonad(val)) {
         return flattenMonad(val.get());
     } else if (isSet(val)) {
         return createSetTree(val);
@@ -82,7 +78,7 @@ const flattenMonad = function (val) {
 const createSetTree = function (set) {
     const newSet = set.emptySet();
     set.forEach(function (val) {
-        if (isChain(val)) {
+        if (isMonad(val)) {
             newSet.addValue(flattenMonad(val.get()));
         } else if (isSet(val)) {
             newSet.addValue(createSetTree(val));
@@ -104,14 +100,13 @@ const flattenSet = function (set, newSet) {
 };
 
 exports.isSet = isSet;
-exports.isFunctor= isFunctor;
+exports.isFunctor = isFunctor;
 exports.isApply = isApply;
 exports.isApplicative = isApplicative;
 exports.isChain = isChain;
 exports.isMonad = isMonad;
 
 exports.mapSet = mapSet;
-exports.forEachSet = forEachSet;
 exports.applySet = applySet;
 exports.chainSet = chainSet;
 exports.flattenSet = flattenSet;

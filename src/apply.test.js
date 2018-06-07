@@ -73,4 +73,12 @@ describe('Apply', function () {
             expect(v.ap(f).get().getArray()).to.be.deep.equal([6, 7, 8, 2, 4, 6]);
         });
     });
+
+    describe('Error checking', function () {
+        it('shoud check for apply type', function () {
+            const a = new Apply(1);
+            const f = function (x) { return x + 5; };
+            expect(a.ap.bind(a, f)).to.throw('Parameter of ap should be type of Apply');
+        });
+    });
 });
