@@ -27,7 +27,7 @@ describe('Applicative', function () {
         });
     });
 
-    describe('Identity: u.map(a => a) == u', function () {
+    describe('Functor: Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = Applicative.of(5);
             expect(u.map(a => a)).to.be.deep.equal(u);
@@ -39,7 +39,7 @@ describe('Applicative', function () {
         });
     });
 
-    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+    describe('Functor: Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
         it('should be work for primitive', function () {
             const u = Applicative.of(5);
             const f = function (x) { return x + 5; };
@@ -55,7 +55,7 @@ describe('Applicative', function () {
         });
     });
 
-    describe('Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
+    describe('Apply: Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
         it('should be work for primitive', function () {
             const v = Applicative.of(5);
             const u = Applicative.of(function (x) { return x + 5; });
@@ -79,7 +79,7 @@ describe('Applicative', function () {
         });
     });
 
-    describe('Identity: v.ap(Applicative.of(x => x)) == v', function () {
+    describe('Applicative: Identity: v.ap(Applicative.of(x => x)) == v', function () {
         it('shoud work for primitive', function () {
             const v = Applicative.of(5);
             expect(v.ap(Applicative.of(x => x))).to.be.deep.equal(v);
@@ -91,7 +91,7 @@ describe('Applicative', function () {
         });
     });
 
-    describe('Homomorphism: A.of(x).ap(A.of(f)) == A.of(f(x))', function () {
+    describe('Applicative: Homomorphism: A.of(x).ap(A.of(f)) == A.of(f(x))', function () {
         it('should work for primitive', function () {
             const f = function (x) { return x + 5; };
             expect(Applicative.of(5).ap(Applicative.of(f))).to.be.deep.equal(Applicative.of(f(5)));
@@ -100,7 +100,7 @@ describe('Applicative', function () {
         it('shoud NOT work for set (set can\'t be passed to function)', function () {});
     });
 
-    describe('Interchange: A.of(y).ap(u) == u.ap(A.of(f => f(y)))', function () {
+    describe('Applicative: Interchange: A.of(y).ap(u) == u.ap(A.of(f => f(y)))', function () {
         it('should work for primitive', function () {
             const u = Applicative.of(function (x) { return x + 5; });
             expect(Applicative.of(5).ap(u)).to.be.deep.equal(u.ap(Applicative.of(f => f(5))));

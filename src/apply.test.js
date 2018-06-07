@@ -22,7 +22,7 @@ describe('Apply', function () {
         });
     });
 
-    describe('Identity: u.map(a => a) == u', function () {
+    describe('Functor: Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = new Apply(5);
             expect(u.map(a => a)).to.be.deep.equal(u);
@@ -34,7 +34,7 @@ describe('Apply', function () {
         });
     });
 
-    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+    describe('Functor: Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
         it('should be work for primitive', function () {
             const u = new Apply(5);
             const f = function (x) { return x + 5; };
@@ -50,7 +50,7 @@ describe('Apply', function () {
         });
     });
 
-    describe('Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
+    describe('Apply : Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
         it('should be work for primitive', function () {
             const v = new Apply(5);
             const u = new Apply(function (x) { return x + 5; });

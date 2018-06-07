@@ -17,7 +17,7 @@ describe('Functor', function () {
         });
     });
 
-    describe('Identity: u.map(a => a) == u', function () {
+    describe('Functor: Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = new Functor(5);
             expect(u.map(a => a)).to.be.deep.equal(u);
@@ -29,7 +29,7 @@ describe('Functor', function () {
         });
     });
 
-    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+    describe('Functor: Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
         it('should be work for primitive', function () {
             const u = new Functor(5);
             const f = function (x) { return x + 5; };

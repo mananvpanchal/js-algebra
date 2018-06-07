@@ -27,7 +27,7 @@ describe('Chain', function () {
         });
     });
 
-    describe('Identity: u.map(a => a) == u', function () {
+    describe('Functor: Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = new Chain(5);
             expect(u.map(a => a)).to.be.deep.equal(u);
@@ -39,7 +39,7 @@ describe('Chain', function () {
         });
     });
 
-    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+    describe('Functor: Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
         it('should be work for primitive', function () {
             const u = new Chain(5);
             const f = function (x) { return x + 5; };
@@ -55,7 +55,7 @@ describe('Chain', function () {
         });
     });
 
-    describe('Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
+    describe('Apply: Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
         it('should be work for primitive', function () {
             const v = new Chain(5);
             const u = new Chain(function (x) { return x + 5; });
@@ -79,7 +79,7 @@ describe('Chain', function () {
         });
     });
 
-    describe('Associativity: m.chain(f).chain(g) == m.chain(x => f(x).chain(g))', function () {
+    describe('Chain: Associativity: m.chain(f).chain(g) == m.chain(x => f(x).chain(g))', function () {
         it('should work for primitive', function () {
             const m = new Chain(5);
             const f = function (x) { return new Chain(x + 5); };

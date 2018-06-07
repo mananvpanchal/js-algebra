@@ -37,7 +37,7 @@ describe('Monad', function () {
         });
     });
 
-    describe('Identity: u.map(a => a) == u', function () {
+    describe('Functor: Identity: u.map(a => a) == u', function () {
         it('should be work for primitive', function () {
             const u = Monad.of(5);
             expect(u.map(a => a)).to.be.deep.equal(u);
@@ -49,7 +49,7 @@ describe('Monad', function () {
         });
     });
 
-    describe('Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
+    describe('Functor: Composition: u.map(x => f(g(x))) == u.map(g).map(f)', function () {
         it('should be work for primitive', function () {
             const u = Monad.of(5);
             const f = function (x) { return x + 5; };
@@ -65,7 +65,7 @@ describe('Monad', function () {
         });
     });
 
-    describe('Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
+    describe('Apply: Composition: v.ap(u.ap(a.map(f => g => x => f(g(x))))) == v.ap(u).ap(a)', function () {
         it('should be work for primitive', function () {
             const v = Monad.of(5);
             const u = Monad.of(function (x) { return x + 5; });
@@ -89,7 +89,7 @@ describe('Monad', function () {
         });
     });
 
-    describe('Associativity: m.chain(f).chain(g) == m.chain(x => f(x).chain(g))', function () {
+    describe('Chain: Associativity: m.chain(f).chain(g) == m.chain(x => f(x).chain(g))', function () {
         it('should work for primitive', function () {
             const m = Monad.of(5);
             const f = function (x) { return Monad.of(x + 5); };
@@ -105,8 +105,8 @@ describe('Monad', function () {
         });
     });
 
-    describe('Identity: v.ap(Monad.of(x => x)) == v', function () {
-        it('shoud work for primitive', function () {
+    describe('Applicative: Identity: v.ap(Monad.of(x => x)) == v', function () {
+        it('should work for primitive', function () {
             const v = Monad.of(5);
             expect(v.ap(Monad.of(x => x))).to.be.deep.equal(v);
         });
@@ -117,7 +117,7 @@ describe('Monad', function () {
         });
     });
 
-    describe('Homomorphism: A.of(x).ap(A.of(f)) == A.of(f(x))', function () {
+    describe('Applicative: Homomorphism: A.of(x).ap(A.of(f)) == A.of(f(x))', function () {
         it('should work for primitive', function () {
             const f = function (x) { return x + 5; };
             expect(Monad.of(5).ap(Monad.of(f))).to.be.deep.equal(Monad.of(f(5)));
@@ -126,7 +126,7 @@ describe('Monad', function () {
         it('shoud NOT work for set (set can\'t be passed to function)', function () {});
     });
 
-    describe('Interchange: A.of(y).ap(u) == u.ap(A.of(f => f(y)))', function () {
+    describe('Applicative: Interchange: A.of(y).ap(u) == u.ap(A.of(f => f(y)))', function () {
         it('should work for primitive', function () {
             const u = Monad.of(function (x) { return x + 5; });
             expect(Monad.of(5).ap(u)).to.be.deep.equal(u.ap(Monad.of(f => f(5))));
@@ -135,7 +135,7 @@ describe('Monad', function () {
         it('shoud NOT work for set (set can\'t be passed to function)', function () {});
     });
 
-    describe('Left Identity: M.of(a).chain(f) == f(a)', function () {
+    describe('Monad: Left Identity: M.of(a).chain(f) == f(a)', function () {
         it('should work for primitive', function () {
             const f = function (x) { return Monad.of(x + 5); };
             expect(Monad.of(5).chain(f)).to.be.deep.equal(f(5));
@@ -144,7 +144,7 @@ describe('Monad', function () {
         it('shoud NOT work for set (set can\'t be passed to function)', function () { });
     });
 
-    describe('Right Identity: m.chain(M.of) == m', function () {
+    describe('Monad: Right Identity: m.chain(M.of) == m', function () {
         it('should work for primitive', function () {
             const m = Monad.of(5);
             expect(m.chain(Monad.of.bind(Monad))).to.be.deep.equal(m);
