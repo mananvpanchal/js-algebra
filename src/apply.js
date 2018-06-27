@@ -17,9 +17,9 @@ Apply.prototype.ap = function (apply) {
     if (!isSet(apply.value) && !(typeof apply.value === 'function')) {
         throw new Error('Value of apply should be type of set or function');
     }
-    return new this.constructor(isSet(this.value)
-        ? applySet(this.value, apply)
-        : apply.value(this.value));
+    return new this.constructor(isSet(this.get())
+        ? applySet(this.get(), apply)
+        : apply.value(this.get()));
 };
 
 Apply.prototype.typeStr = function () {

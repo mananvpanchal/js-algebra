@@ -15,9 +15,9 @@ Chain.prototype.chain = function (cFunc) {
     if (!(typeof cFunc === 'function')) {
         throw new Error('Parameter of chain shoud be type of function')
     }
-    if (isSet(this.value)) {
-        const newSet = this.value.emptySet();
-        const chnSet = chainSet(this.value, cFunc);
+    if (isSet(this.get())) {
+        const newSet = this.get().emptySet();
+        const chnSet = chainSet(this.get(), cFunc);
         chnSet.forEach(function (chn, idx) {
             if(!isChain(chn)) {
                 throw new Error('Return value of chain function is not a type of '+typeStr());
@@ -26,7 +26,7 @@ Chain.prototype.chain = function (cFunc) {
         });
         return new this.constructor(newSet);
     } else {
-        return cFunc(this.value);
+        return cFunc(this.get());
     }
 };
 

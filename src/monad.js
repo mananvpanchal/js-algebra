@@ -14,7 +14,7 @@ Monad.isMonad = function (monad) {
 };
 
 Monad.prototype.join = function () {
-    const val = flattenMonad(this.value);
+    const val = flattenMonad(this.get());
     if (isSet(val)) {
         const newSet = val.emptySet();
         flattenSet(val, newSet);

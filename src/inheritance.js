@@ -8,5 +8,5 @@ const _inherit = function(sub, base) {
 
 module.exports = function (sub, base, staticBase) {
     _inherit(sub.prototype, base.prototype);
-    _inherit(sub, staticBase ? staticBase : base);
+    _inherit(sub, staticBase || base);
 };
