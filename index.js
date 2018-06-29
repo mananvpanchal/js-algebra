@@ -1,9 +1,5 @@
-const ArraySet = require('./src/array-set');
-const Functor = require('./src/functor');
-const Apply = require('./src/apply');
-const Applicative = require('./src/applicative');
-const Chain = require('./src/chain');
-const Monad = require('./src/monad');
+const { ArraySet } = require('./src/set');
+const { Functor, Apply, Applicative, Chain, Monad } = require('./src/algebra');
 
 exports.default = Monad;
 
