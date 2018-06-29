@@ -3,8 +3,8 @@ const Applicative = require('./applicative');
 const { inherit, isSet, isMonad, isChain, 
     flattenSet, flattenMonad } = require('../util');
 
-const Monad = function (value, loader) {
-    Chain.call(this, value, loader);
+const Monad = function (value) {
+    Chain.call(this, value);
 };
 
 Monad.isMonad = function (monad) {

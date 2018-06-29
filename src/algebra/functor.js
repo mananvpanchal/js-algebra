@@ -1,22 +1,11 @@
 const { isSet, isFunctor, mapSet, forEachSet } = require('../util');
 
-const Functor = function (value, loader) {
-    if (!value && !(typeof loader === 'function')) {
-        throw new Error('Loader should be type of function when value is null / undefined')
-    }
+const Functor = function (value) {
     this.value = value;
-    this.loader = loader;
 };
 
 Functor.isFunctor = function (functor) {
     return isFunctor(functor);
-};
-
-Functor.prototype.load = function() {
-    if (!(typeof this.loader === 'function')) {
-        throw new Error('Loader should be type of function')
-    }
-    return this.loader(this);
 };
 
 Functor.prototype.map = function (mFunc) {
@@ -29,7 +18,7 @@ Functor.prototype.map = function (mFunc) {
 };
 
 Functor.prototype.get = function () {
-    return this.value || (this.value = this.load());
+    return this.value;
 };
 
 Functor.prototype.typeStr = function () {

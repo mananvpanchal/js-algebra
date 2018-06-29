@@ -1,8 +1,8 @@
 const Apply  = require('./apply');
 const { inherit, isSet, isChain, chainSet } = require('../util');
 
-const Chain = function (value, loader) {
-    Apply.call(this, value, loader);
+const Chain = function (value) {
+    Apply.call(this, value);
 };
 
 Chain.isChain = function (chain) {
