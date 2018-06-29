@@ -1,7 +1,8 @@
 const { expect } = require('chai');
-const Monad = require('./monad');
-const ArraySet = require('./array-set');
-const { isSet } = require('./util');
+
+const { Monad } = require('../../src/algebra');
+const { ArraySet } = require('../../src/set');
+const { isSet } = require('../../src/util');
 
 describe('Monad', function () {
 

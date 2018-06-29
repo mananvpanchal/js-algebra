@@ -1,6 +1,5 @@
-const Apply = require('./apply');
-const inherit = require('./inheritance');
-const { isApplicative } = require('./util');
+const Apply  = require('./apply');
+const { inherit, isApplicative } = require('../util');
 
 const Applicative = function (value, loader) {
     Apply.call(this, value, loader);

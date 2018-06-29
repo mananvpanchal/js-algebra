@@ -4,7 +4,7 @@
   "description": "Javascript algebras",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src"
+    "test": "mocha ./test/**/*.js"
   },
   "author": "Manan Panchal <mananvpanchal@gmail.com>",
   "license": "BSD-3-Clause",

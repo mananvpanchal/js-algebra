@@ -1,6 +1,7 @@
 const { expect } = require('chai');
-const Applicative = require('./applicative');
-const ArraySet = require('./array-set');
+
+const { Applicative } = require('../../src/algebra');
+const { ArraySet } = require('../../src/set');
 
 describe('Applicative', function () {
 

@@ -1,5 +1,5 @@
-const inherit = require('./inheritance');
-const Monad = require('./monad');
+const { inherit } = require('../util');
+const { Monad } = require('../algebra');
 
 const Maybe = function (value, loader) {
     Monad.call(this, value, loader);

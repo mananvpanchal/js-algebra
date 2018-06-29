@@ -1,7 +1,7 @@
 const { expect } = require('chai');
-const { Maybe } = require('./maybe');
-const ArraySet = require('./array-set');
-const { isSet } = require('./util');
+const { Maybe } = require('../../src/derivative/maybe');
+const { ArraySet } = require('../../src/set');
+const { isSet } = require('../../src/util');
 
 describe('Maybe', function () {
 

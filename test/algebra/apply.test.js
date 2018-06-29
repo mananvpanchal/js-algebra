@@ -1,6 +1,7 @@
-const Apply = require('./apply');
 const { expect } = require('chai');
-const ArraySet = require('./array-set');
+
+const { Apply } = require('../../src/algebra');
+const { ArraySet } = require('../../src/set');
 
 describe('Apply', function () {
 

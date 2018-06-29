@@ -1,6 +1,7 @@
 const { expect } = require('chai');
-const Chain = require('./chain');
-const ArraySet = require('./array-set');
+
+const { Chain } = require('../../src/algebra');
+const { ArraySet } = require('../../src/set');
 
 describe('Chain', function () {
 

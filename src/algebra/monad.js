@@ -1,9 +1,7 @@
 const Chain = require('./chain');
 const Applicative = require('./applicative');
-const inherit = require('./inheritance');
-const { isSet, isMonad, isChain, 
-    createSetTree, flattenSet, 
-    flattenMonad } = require('./util');
+const { inherit, isSet, isMonad, isChain, 
+    flattenSet, flattenMonad } = require('../util');
 
 const Monad = function (value, loader) {
     Chain.call(this, value, loader);

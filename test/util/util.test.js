@@ -1,14 +1,10 @@
 const { expect } = require('chai');
 const { 
     isSet, isFunctor, isApply, isApplicative, isChain, isMonad 
-} = require('./util');
+} = require('../../src/util');
 
-const ArraySet = require('./array-set');
-const Functor = require('./functor');
-const Apply = require('./apply');
-const Applicative = require('./applicative');
-const Chain = require('./chain');
-const Monad = require('./monad');
+const { ArraySet } = require('../../src/set');
+const  { Functor, Apply, Applicative, Chain, Monad } = require('../../src/algebra');
 
 describe('Util test', function () {
 

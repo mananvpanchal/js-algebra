@@ -1,6 +1,7 @@
-const Functor = require('./functor');
 const { expect } = require('chai');
-const ArraySet = require('./array-set');
+
+const { Functor } = require('../../src/algebra');
+const { ArraySet } = require('../../src/set');
 
 describe('Functor', function () {
 

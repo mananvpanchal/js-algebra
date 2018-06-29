@@ -1,6 +1,5 @@
-const Functor = require('./functor');
-const inherit = require('./inheritance');
-const { isSet, isApply, applySet } = require('./util');
+const Functor  = require('./functor');
+const { inherit, isSet, isApply, applySet } = require('../util');
 
 const Apply = function (value, loader) {
     Functor.call(this, value, loader);
