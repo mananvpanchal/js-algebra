@@ -8,7 +8,7 @@ const Maybe = function (value) {
 inherit(Maybe, Monad);
 
 const Just = function(value) {
-    Maybe.call(this, value, null);
+    Maybe.call(this, value);
 };
 
 inherit(Just, Maybe);
@@ -22,7 +22,7 @@ Just.prototype.orElse = function (f) {
 }
 
 const Nothing = function () {
-    Maybe.call(this, null, () => null);
+    Maybe.call(this, null);
 };
 
 inherit(Nothing, Maybe);
